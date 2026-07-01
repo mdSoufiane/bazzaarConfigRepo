@@ -8,7 +8,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
-      group-id: payment-service-group
+      group-id: ${SPRING_KAFKA_PAYMENT_CONSUMER_GROUP_ID:payment-service-group}
       auto-offset-reset: earliest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -45,7 +45,7 @@ kafka:
     payment-cancelled: ${KAFKA_TOPICS_PAYMENT_CANCELLED:payment-cancelled-topic}
     order-cancelled: ${KAFKA_TOPICS_ORDER_CANCELLED:order-cancelled-topic}
   consumer:
-    group-id: ${spring.kafka.consumer.group-id:payment-service-group}
+    group-id: ${SPRING_KAFKA_PAYMENT_CONSUMER_GROUP_ID:payment-service-group}
 
 
 

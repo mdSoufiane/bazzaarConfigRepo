@@ -5,7 +5,7 @@ spring:
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
-      group-id: notification-service-group
+      group-id: ${SPRING_KAFKA_NOTIFICATION_CONSUMER_GROUP_ID:notification-service-group}
       auto-offset-reset: earliest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -27,7 +27,7 @@ kafka:
     order-confirmation: ${KAFKA_TOPICS_ORDER_CONFIRMATION:order-confirmation-topic}
     order-cancelled: ${KAFKA_TOPICS_ORDER_CANCELLED:order-cancelled-topic}
   consumer:
-    group-id: ${spring.kafka.consumer.group-id:notification-service-group}
+    group-id: ${SPRING_KAFKA_NOTIFICATION_CONSUMER_GROUP_ID:notification-service-group}
 
 # Application Configuration
 application:

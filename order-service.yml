@@ -14,7 +14,7 @@ spring:
         max.in.flight.requests.per.connection: 5
         spring.json.add.type.headers: false
     consumer:
-      group-id: order-service-group
+      group-id: ${SPRING_KAFKA_ORDER_CONSUMER_GROUP_ID:order-service-group}
       auto-offset-reset: earliest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -39,7 +39,7 @@ kafka:
     payment-completed: ${KAFKA_TOPICS_PAYMENT_COMPLETED:payment-completed-topic}
     payment-failed: ${KAFKA_TOPICS_PAYMENT_FAILED:payment-failed-topic}
   consumer:
-    group-id: ${spring.kafka.consumer.group-id:order-service-group}
+    group-id: ${SPRING_KAFKA_ORDER_CONSUMER_GROUP_ID:order-service-group}
 
 
 application:

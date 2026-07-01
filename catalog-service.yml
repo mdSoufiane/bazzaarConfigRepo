@@ -1,0 +1,49 @@
+server:
+  port: 8083
+
+application:
+  store-client:
+    service:
+      url: ${APPLICATION_STORE_CLIENT_SERVICE_URL:http://localhost:8082}
+  media-client:
+    service:
+      url: ${APPLICATION_MEDIA_CLIENT_SERVICE_URL:http://localhost:8088}
+
+spring:
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: catalog-service-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        isolation.level: read_committed
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+    listener:
+      ack-mode: manual
+      concurrency: 3
+
+kafka:
+  topics:
+    inventory-request: inventory-request-topic
+    inventory-reserved: inventory-reserved-topic
+    inventory-reservation-failed: inventory-failed-topic
+    order-cancelled: order-cancelled-topic
+    payment-completed: payment-completed-topic
+  consumer:
+    group-id: ${spring.kafka.consumer.group-id:catalog-service-group}
+
+# Override global eureka config for Docker
+eureka:
+  instance:
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP:false}

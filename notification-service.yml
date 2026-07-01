@@ -1,0 +1,45 @@
+server:
+  port: 8087
+
+spring:
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: notification-service-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        isolation.level: read_committed
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: java.lang.Object
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+    listener:
+      ack-mode: manual
+      concurrency: 3
+
+# Kafka Topics
+kafka:
+  topics:
+    order-confirmation: ${KAFKA_TOPICS_ORDER_CONFIRMATION:order-confirmation-topic}
+    order-cancelled: ${KAFKA_TOPICS_ORDER_CANCELLED:order-cancelled-topic}
+  consumer:
+    group-id: ${spring.kafka.consumer.group-id:notification-service-group}
+
+# Application Configuration
+application:
+  mailing:
+    company-name: Bazzaar E-Commerce
+    support-email: support@bazzaar.com
+
+# Logging
+logging:
+  level:
+    com.bazzaar.notification: DEBUG
+    org.springframework.kafka: INFO
+    org.springframework.mail: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"

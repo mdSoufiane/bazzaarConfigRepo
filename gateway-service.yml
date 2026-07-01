@@ -1,0 +1,44 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+server:
+  port: 8222
+
+# SpringDoc OpenAPI Configuration
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    # Services will be discovered automatically via Eureka
+    # Access pattern: http://localhost:8080/{service-name}/v3/api-docs
+    urls:
+      - name: Auth Service
+        url: /${SPRINGDOC_SWAGGERUI_URL_AUTHSERVICE:auth-service}/v3/api-docs
+      - name: Store Service
+        url: /${SPRINGDOC_SWAGGERUI_URL_STORESERVICE:store-service}/v3/api-docs
+      - name: Catalog Service
+        url: /${SPRINGDOC_SWAGGERUI_URL_CATALOGSERVICE:catalog-service}/v3/api-docs
+      - name: Cart Service
+        url: /${SPRINGDOC_SWAGGERUI_URL_CARTSERVICE:cart-service}/v3/api-docs
+      - name: Order Service
+        url: /${SPRINGDOC_SWAGGERUI_URL_ORDERSERVICE:order-service}/v3/api-docs
+      - name: Payment Service
+        url: /${SPRINGDOC_SWAGGERUI_URL_PAYMENTSERVICE:payment-service}/v3/api-docs
+      - name: Notification Service
+        url: /${SPRINGDOC_SWAGGERUI_URL_NOTIFICATIONSERVICE:notification-service}/v3/api-docs
+      - name: Media Service
+        url: /${SPRINGDOC_SWAGGERUI_URL_MEDIASERVICE:media-service}/v3/api-docs
+    # Swagger UI customization
+    display-request-duration: true
+    operations-sorter: alpha
+    tags-sorter: alpha
+    try-it-out-enabled: true
+  show-actuator: true

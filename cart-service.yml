@@ -1,0 +1,38 @@
+server:
+  port: 8084
+
+spring:
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: 60000
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+      cache-null-values: false
+#      key-prefix: bazzaar::
+      use-key-prefix: true
+logging:
+  level:
+    org.springframework.data.redis: INFO
+    org.hibernate.sql: DEBUG
+cart:
+  guest:
+    expiration-days: 30
+  cache:
+    expiration-hours: 24
+
+application:
+  product-client:
+    service:
+      url: ${APPLICATION_PRODUCT_CLIENT_SERVICE_URL:http://localhost:8083}
+  order-client:
+    service:
+      url: ${APPLICATION_ORDER_CLIENT_SERVICE_URL:http://localhost:8085}

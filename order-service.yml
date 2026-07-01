@@ -1,0 +1,54 @@
+server:
+  port: 8085
+
+spring:
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+        spring.json.add.type.headers: false
+    consumer:
+      group-id: order-service-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        isolation.level: read_committed
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: java.lang.Object
+    listener:
+      ack-mode: manual
+      concurrency: 3
+
+kafka:
+  topics:
+    inventory-request: ${KAFKA_TOPICS_INVENTORY_REQUEST:inventory-request-topic}
+    inventory-reserved: ${KAFKA_TOPICS_INVENTORY_RESERVED:inventory-reserved-topic}
+    inventory-reservation-failed: ${KAFKA_TOPICS_INVENTORY_RESERVATION_FAILED:inventory-failed-topic}
+    payment-request: ${KAFKA_TOPICS_PAYMENT_REQUEST:payment-request-topic}
+    order-cancelled: ${KAFKA_TOPICS_ORDER_CANCELLED:order-cancelled-topic}
+    order-confirmation: ${KAFKA_TOPICS_ORDER_CONFIRMATION:order-confirmation-topic}
+    payment-completed: ${KAFKA_TOPICS_PAYMENT_COMPLETED:payment-completed-topic}
+    payment-failed: ${KAFKA_TOPICS_PAYMENT_FAILED:payment-failed-topic}
+  consumer:
+    group-id: ${spring.kafka.consumer.group-id:order-service-group}
+
+
+application:
+  product-client:
+    service:
+      url: ${APPLICATION_PRODUCT_CLIENT_SERVICE_URL:http://localhost:8083}
+  payment-client:
+    service:
+      url: ${APPLICATION_PAYMENT_CLIENT_SERVICE_URL:http://localhost:8086}
+  customer-client:
+    service:
+      url: ${APPLICATION_CUSTOMER_CLIENT_SERVICE_URL:http://localhost:8081}

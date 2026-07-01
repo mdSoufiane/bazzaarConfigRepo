@@ -1,0 +1,15 @@
+application:
+  security:
+    jwt:
+      access-token-expiration: ${ACCESS_TOKEN_EXPIRATION:86400000}
+      refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION:604800000}
+    disposable-email: ${DISPOSABLE_EMAIL:10minutemail,20minutemail,33mail,5ymail,anonbox,guerrillamail,mailinator,maildrop,mailnesia,moakt,my10minutemail,throwawaymail,trashmail,temp-mail,tempmail,truemail}
+  mailing:
+    frontend:
+      activation_url: ${MAILING_FRONTEND_ACTIVATION_URL:http://localhost:8081/activate-account}
+  media-client:
+    service:
+      url: ${APPLICATION_MEDIA_CLIENT_SERVICE_URL:http://localhost:8088}
+
+server:
+  port: 8081

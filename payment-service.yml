@@ -1,0 +1,51 @@
+server:
+  port: 8086
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: payment-service-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        isolation.level: read_committed
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+    listener:
+      ack-mode: manual
+      concurrency: 3
+
+logging:
+  level:
+    com.bazzaar.payment: DEBUG
+    org.springframework.kafka: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+
+kafka:
+  topics:
+    payment-request: ${KAFKA_TOPICS_PAYMENT_REQUEST:payment-request-topic}
+    payment-completed: ${KAFKA_TOPICS_PAYMENT_COMPLETED:payment-completed-topic}
+    payment-failed: ${KAFKA_TOPICS_PAYMENT_FAILED:payment-failed-topic}
+    payment-cancelled: ${KAFKA_TOPICS_PAYMENT_CANCELLED:payment-cancelled-topic}
+    order-cancelled: ${KAFKA_TOPICS_ORDER_CANCELLED:order-cancelled-topic}
+  consumer:
+    group-id: ${spring.kafka.consumer.group-id:payment-service-group}
+
+
+

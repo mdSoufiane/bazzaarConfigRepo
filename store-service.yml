@@ -1,0 +1,10 @@
+application:
+  user-client:
+    service:
+      url: ${APPLICATION_USER_CLIENT_SERVICE_URL:http://localhost:8081}
+  media-client:
+    service:
+      url: ${APPLICATION_MEDIA_CLIENT_SERVICE_URL:http://localhost:8088}
+
+server:
+  port: 8082

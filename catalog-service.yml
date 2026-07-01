@@ -39,8 +39,6 @@ kafka:
     inventory-reservation-failed: inventory-failed-topic
     order-cancelled: order-cancelled-topic
     payment-completed: payment-completed-topic
-  consumer:
-    group-id: ${SPRING_KAFKA_CATALOG_CONSUMER_GROUP_ID:catalog-service-group}
 
 # Override global eureka config for Docker
 eureka:
